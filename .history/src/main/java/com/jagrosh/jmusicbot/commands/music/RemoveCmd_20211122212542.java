@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class RemoveCmd extends Command
 {
-    public RemoveCmd(Bot bot)
+    public ForceRemoveCmd(Bot bot)
     {
         super(bot);
         this.name = "remove";
