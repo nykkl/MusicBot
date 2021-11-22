@@ -18,7 +18,7 @@ package com.jagrosh.jmusicbot.commands.dj;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
-import com.jagrosh.jmusicbot.commands.DJCommand;
+import com.jagrosh.jmusicbot.commands.AdminCommand;
 import com.jagrosh.jmusicbot.settings.Settings;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
 
@@ -26,7 +26,7 @@ import com.jagrosh.jmusicbot.utils.FormatUtil;
  *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class VolumeCmd extends DJCommand
+public class VolumeCmd extends AdminCommand
 {
     public VolumeCmd(Bot bot)
     {
@@ -34,7 +34,7 @@ public class VolumeCmd extends DJCommand
         this.name = "volume";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.help = "sets or shows volume";
-        this.arguments = "[0-150]";
+        this.arguments = "[0-500]";
     }
 
     @Override
@@ -55,8 +55,8 @@ public class VolumeCmd extends DJCommand
             }catch(NumberFormatException e){
                 nvolume = -1;
             }
-            if(nvolume<0 || nvolume>150)
-                event.reply(event.getClient().getError()+" Volume must be a valid integer between 0 and 150!");
+            if(nvolume<0 || nvolume>500)
+                event.reply(event.getClient().getError()+" Volume must be a valid integer between 0 and 500!");
             else
             {
                 handler.getPlayer().setVolume(nvolume);

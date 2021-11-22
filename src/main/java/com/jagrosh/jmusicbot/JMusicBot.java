@@ -19,7 +19,6 @@ import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.jagrosh.jdautilities.examples.command.*;
 import com.jagrosh.jmusicbot.commands.admin.*;
-import com.jagrosh.jmusicbot.commands.dj.*;
 import com.jagrosh.jmusicbot.commands.general.*;
 import com.jagrosh.jmusicbot.commands.music.*;
 import com.jagrosh.jmusicbot.commands.owner.*;
@@ -109,23 +108,16 @@ public class JMusicBot
                         new SCSearchCmd(bot),
                         new ShuffleCmd(bot),
                         new SkipCmd(bot),
-
-                        new ForceRemoveCmd(bot),
-                        new ForceskipCmd(bot),
-                        new MoveTrackCmd(bot),
                         new PauseCmd(bot),
-                        new PlaynextCmd(bot),
                         new RepeatCmd(bot),
                         new SkiptoCmd(bot),
                         new StopCmd(bot),
-                        new VolumeCmd(bot),
-                        
+
                         new PrefixCmd(bot),
-                        new SetdjCmd(bot),
-                        new SkipratioCmd(bot),
+                        new VolumeCmd(bot),
                         new SettcCmd(bot),
                         new SetvcCmd(bot),
-                        
+
                         new AutoplaylistCmd(bot),
                         new DebugCmd(bot),
                         new PlaylistCmd(bot),
@@ -135,8 +127,6 @@ public class JMusicBot
                         new SetstatusCmd(bot),
                         new ShutdownCmd(bot)
                 );
-        if(config.useEval())
-            cb.addCommand(new EvalCmd(bot));
         boolean nogame = false;
         if(config.getStatus()!=OnlineStatus.UNKNOWN)
             cb.setStatus(config.getStatus());

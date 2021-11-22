@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 John Grosh <john.a.grosh@gmail.com>.
+ * Copyright 2019 John Grosh <john.a.grosh@gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,88 +13,107 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jagrosh.jmusicbot.commands.music;
+package com.jagrosh.jmusicbot.commands.dj;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
+import com.jagrosh.jdautilities.commons.utils.FinderUtil;
+import com.jagrosh.jdautilities.menu.OrderedMenu;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
-import com.jagrosh.jmusicbot.audio.QueuedTrack;
-import com.jagrosh.jmusicbot.commands.MusicCommand;
-import com.jagrosh.jmusicbot.settings.Settings;
+import com.jagrosh.jmusicbot.commands.Command;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
- * @author John Grosh <john.a.grosh@gmail.com>
+ * @author Michaili K.
  */
-public class RemoveCmd extends MusicCommand 
+public class RemoveCmd extends Command
 {
-    public RemoveCmd(Bot bot)
+    public ForceRemoveCmd(Bot bot)
     {
         super(bot);
         this.name = "remove";
-        this.help = "removes a song from the queue";
-        this.arguments = "<position|ALL>";
+        this.help = "removes all entries by a user from the queue";
+        this.arguments = "<user>";
         this.aliases = bot.getConfig().getAliases(this.name);
-        this.beListening = true;
+        this.beListening = false;
         this.bePlaying = true;
+        this.botPermissions = new Permission[]{Permission.MESSAGE_EMBED_LINKS};
     }
 
     @Override
-    public void doCommand(CommandEvent event) 
+    public void doCommand(CommandEvent event)
     {
-        AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
-        if(handler.getQueue().isEmpty())
+        if (event.getArgs().isEmpty())
+        {
+            event.replyError("You need to mention a user!");
+            return;
+        }
+
+        AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+        if (handler.getQueue().isEmpty())
         {
             event.replyError("There is nothing in the queue!");
             return;
         }
-        if(event.getArgs().equalsIgnoreCase("all"))
+
+
+        User target;
+        List<Member> found = FinderUtil.findMembers(event.getArgs(), event.getGuild());
+
+        if(found.isEmpty())
         {
-            int count = handler.getQueue().removeAll(event.getAuthor().getIdLong());
-            if(count==0)
-                event.replyWarning("You don't have any songs in the queue!");
-            else
-                event.replySuccess("Successfully removed your "+count+" entries.");
+            event.replyError("Unable to find the user!");
             return;
         }
-        int pos;
-        try {
-            pos = Integer.parseInt(event.getArgs());
-        } catch(NumberFormatException e) {
-            pos = 0;
-        }
-        if(pos<1 || pos>handler.getQueue().size())
+        else if(found.size()>1)
         {
-            event.replyError("Position must be a valid integer between 1 and "+handler.getQueue().size()+"!");
-            return;
-        }
-        Settings settings = event.getClient().getSettingsFor(event.getGuild());
-        boolean isDJ = event.getMember().hasPermission(Permission.MANAGE_SERVER);
-        if(!isDJ)
-            isDJ = event.getMember().getRoles().contains(settings.getRole(event.getGuild()));
-        QueuedTrack qt = handler.getQueue().get(pos-1);
-        if(qt.getIdentifier()==event.getAuthor().getIdLong())
-        {
-            handler.getQueue().remove(pos-1);
-            event.replySuccess("Removed **"+qt.getTrack().getInfo().title+"** from the queue");
-        }
-        else if(isDJ)
-        {
-            handler.getQueue().remove(pos-1);
-            User u;
-            try {
-                u = event.getJDA().getUserById(qt.getIdentifier());
-            } catch(Exception e) {
-                u = null;
+            OrderedMenu.Builder builder = new OrderedMenu.Builder();
+            for(int i=0; i<found.size() && i<4; i++)
+            {
+                Member member = found.get(i);
+                builder.addChoice("**"+member.getUser().getName()+"**#"+member.getUser().getDiscriminator());
             }
-            event.replySuccess("Removed **"+qt.getTrack().getInfo().title
-                    +"** from the queue (requested by "+(u==null ? "someone" : "**"+u.getName()+"**")+")");
+
+            builder
+            .setSelection((msg, i) -> removeAllEntries(found.get(i-1).getUser(), event))
+            .setText("Found multiple users:")
+            .setColor(event.getSelfMember().getColor())
+            .useNumbers()
+            .setUsers(event.getAuthor())
+            .useCancelButton(true)
+            .setCancel((msg) -> {})
+            .setEventWaiter(bot.getWaiter())
+            .setTimeout(1, TimeUnit.MINUTES)
+
+            .build().display(event.getChannel());
+
+            return;
         }
         else
         {
-            event.replyError("You cannot remove **"+qt.getTrack().getInfo().title+"** because you didn't add it!");
+            target = found.get(0).getUser();
+        }
+
+        removeAllEntries(target, event);
+
+    }
+
+    private void removeAllEntries(User target, CommandEvent event)
+    {
+        int count = ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).getQueue().removeAll(target.getIdLong());
+        if (count == 0)
+        {
+            event.replyWarning("**"+target.getName()+"** doesn't have any songs in the queue!");
+        }
+        else
+        {
+            event.replySuccess("Successfully removed `"+count+"` entries from **"+target.getName()+"**#"+target.getDiscriminator()+".");
         }
     }
 }

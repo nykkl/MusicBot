@@ -17,7 +17,7 @@ package com.jagrosh.jmusicbot.commands.dj;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
-import com.jagrosh.jmusicbot.commands.DJCommand;
+import com.jagrosh.jmusicbot.commands.Command;
 import com.jagrosh.jmusicbot.settings.RepeatMode;
 import com.jagrosh.jmusicbot.settings.Settings;
 
@@ -25,7 +25,7 @@ import com.jagrosh.jmusicbot.settings.Settings;
  *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class RepeatCmd extends DJCommand
+public class RepeatCmd extends Command
 {
     public RepeatCmd(Bot bot)
     {

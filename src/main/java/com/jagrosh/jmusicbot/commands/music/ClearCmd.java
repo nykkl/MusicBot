@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 John Grosh <john.a.grosh@gmail.com>.
+ * Copyright 2016 John Grosh <john.a.grosh@gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,34 +13,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jagrosh.jmusicbot.commands.dj;
+package com.jagrosh.jmusicbot.commands.music;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
-import com.jagrosh.jmusicbot.commands.DJCommand;
+import com.jagrosh.jmusicbot.audio.QueuedTrack;
+import com.jagrosh.jmusicbot.commands.MusicCommand;
+import com.jagrosh.jmusicbot.settings.Settings;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.User;
 
 /**
  *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class StopCmd extends DJCommand 
+public class ClearCmd extends MusicCommand 
 {
-    public StopCmd(Bot bot)
+    public ClearCmd(Bot bot)
     {
         super(bot);
-        this.name = "stop";
-        this.help = "stops the current song and clears the queue";
+        this.name = "clear";
+        this.help = "clears the queue";
         this.aliases = bot.getConfig().getAliases(this.name);
-        this.bePlaying = false;
+        this.beListening = true;
+        this.bePlaying = true;
     }
 
     @Override
     public void doCommand(CommandEvent event) 
     {
         AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
-        handler.stopAndClear();
-        event.getGuild().getAudioManager().closeAudioConnection();
-        event.reply(event.getClient().getSuccess()+" The player has stopped and the queue has been cleared.");
+        int count = handler.getQueue().removeAll(event.getAuthor().getIdLong());
+        if(count==0)
+            event.replyWarning("You don't have any songs in the queue!");
+        else
+            event.replySuccess("Successfully removed "+count+" entries.");
+        return;
     }
 }
