@@ -52,6 +52,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
 
     private final PlayerManager manager;
     private final AudioPlayer audioPlayer;
+    private final EqualizerFactory eqFactory;
     private final long guildId;
 
     private AudioFrame lastFrame;
@@ -59,14 +60,13 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     protected AudioHandler(PlayerManager manager, Guild guild, AudioPlayer player) {
         this.manager = manager;
         this.audioPlayer = player;
+        this.eqFactory = new EqualizerFactory();
         this.guildId = guild.getIdLong();
     }
 
     public boolean setBandGains(float ...gains) {
-        EqualizerFactory eqFactory = new EqualizerFactory();
-
         // 15 = eq bands
-        if (gains.length >= 15) {
+        if (gains.length > 15) {
             return false;
         }
 
@@ -79,7 +79,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     }
 
     public void resetBandGain() {
-        this.audioPlayer.setFilterFactory(null);
+        this.setBandGains(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
     }
 
     public int addTrackToFront(QueuedTrack qtrack) {

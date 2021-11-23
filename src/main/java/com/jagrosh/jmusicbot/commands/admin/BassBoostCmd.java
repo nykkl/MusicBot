@@ -44,14 +44,32 @@ public class BassBoostCmd extends AdminCommand {
 
         int boost = Integer.parseInt(event.getArgs());
 
-        if (boost < 1 || boost > 100) {
+        if (boost < 0 || boost > 100) {
             event.reply(event.getClient().getError() + " Bass boost must be a valid integer between 1 and 100!");
+            return;
         }
 
-        float gain = 0.1f * boost;
-
-        handler.setBandGains(gain, gain, gain, gain, gain);
-        event.replySuccess("Successfully set bass boost to " + event.getArgs() + ".");
-        return;
+        handler.setBandGains(
+                0.004f * boost,
+                0.005f * boost,
+                0.005f * boost,
+                0.004f * boost,
+                0.003f * boost,
+                0.002f * boost,
+                0.00f,
+                0.00f,
+                0.00f,
+                0.00f,
+                0.00f,
+                0.00f,
+                0.00f,
+                0.00f,
+                0.00f
+        );
+        if (boost == 0) {
+            event.replySuccess("Bass boost disabled!");
+        } else {
+            event.replySuccess("Successfully set bass boost to " + event.getArgs() + ".");
+        }
     }
 }
