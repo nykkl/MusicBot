@@ -49,6 +49,8 @@ public class BassBoostCmd extends AdminCommand {
             return;
         }
 
+        // todo: eq preset filter factory
+        // todo: store bass boost settings in Settings class
         handler.setBandGains(
                 0.004f * boost,
                 0.005f * boost,
