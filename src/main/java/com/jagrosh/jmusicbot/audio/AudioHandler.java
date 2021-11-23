@@ -21,6 +21,7 @@ import com.jagrosh.jmusicbot.queue.FairQueue;
 import com.jagrosh.jmusicbot.settings.RepeatMode;
 import com.jagrosh.jmusicbot.settings.Settings;
 import com.jagrosh.jmusicbot.utils.FormatUtil;
+import com.sedmelluq.discord.lavaplayer.filter.equalizer.EqualizerFactory;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioTrack;
@@ -59,6 +60,26 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
         this.manager = manager;
         this.audioPlayer = player;
         this.guildId = guild.getIdLong();
+    }
+
+    public boolean setBandGains(float ...gains) {
+        EqualizerFactory eqFactory = new EqualizerFactory();
+
+        // 15 = eq bands
+        if (gains.length >= 15) {
+            return false;
+        }
+
+        for (int i = 0; i < gains.length; i++) {
+            eqFactory.setGain(i, gains[i]);
+        }
+
+        this.audioPlayer.setFilterFactory(eqFactory);
+        return true;
+    }
+
+    public void resetBandGain() {
+        this.audioPlayer.setFilterFactory(null);
     }
 
     public int addTrackToFront(QueuedTrack qtrack) {

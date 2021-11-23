@@ -19,10 +19,7 @@ import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.jagrosh.jdautilities.examples.command.AboutCommand;
 import com.jagrosh.jdautilities.examples.command.PingCommand;
-import com.jagrosh.jmusicbot.commands.admin.PrefixCmd;
-import com.jagrosh.jmusicbot.commands.admin.SettcCmd;
-import com.jagrosh.jmusicbot.commands.admin.SetvcCmd;
-import com.jagrosh.jmusicbot.commands.admin.VolumeCmd;
+import com.jagrosh.jmusicbot.commands.admin.*;
 import com.jagrosh.jmusicbot.commands.general.SettingsCmd;
 import com.jagrosh.jmusicbot.commands.music.*;
 import com.jagrosh.jmusicbot.commands.owner.*;
@@ -121,6 +118,7 @@ public class JMusicBot {
 
                         new PrefixCmd(bot),
                         new VolumeCmd(bot),
+                        new BassBoostCmd(bot),
                         new SettcCmd(bot),
                         new SetvcCmd(bot),
 
