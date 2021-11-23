@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jagrosh.jmusicbot.commands.music;
+package com.jagrosh.jmusicbot.commands.dj;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
-import com.jagrosh.jmusicbot.commands.MusicCommand;
+import com.jagrosh.jmusicbot.commands.Command;
 import com.jagrosh.jmusicbot.settings.RepeatMode;
 import com.jagrosh.jmusicbot.settings.Settings;
 
@@ -25,7 +25,7 @@ import com.jagrosh.jmusicbot.settings.Settings;
  *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class RepeatCmd extends MusicCommand
+public class RepeatCmd extends Command
 {
     public RepeatCmd(Bot bot)
     {

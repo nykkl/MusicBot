@@ -30,6 +30,7 @@ public class VolumeCmd extends AdminCommand
 {
     public VolumeCmd(Bot bot)
     {
+        super(bot);
         this.name = "volume";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.help = "sets or shows volume";
@@ -37,7 +38,7 @@ public class VolumeCmd extends AdminCommand
     }
 
     @Override
-    public void execute(CommandEvent event)
+    public void doCommand(CommandEvent event)
     {
         AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
         Settings settings = event.getClient().getSettingsFor(event.getGuild());

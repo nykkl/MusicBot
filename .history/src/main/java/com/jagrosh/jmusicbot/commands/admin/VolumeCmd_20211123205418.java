@@ -30,6 +30,7 @@ public class VolumeCmd extends AdminCommand
 {
     public VolumeCmd(Bot bot)
     {
+        super(bot);
         this.name = "volume";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.help = "sets or shows volume";

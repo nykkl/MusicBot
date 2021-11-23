@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 John Grosh <john.a.grosh@gmail.com>.
+ * Copyright 2018 John Grosh <john.a.grosh@gmail.com>.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,25 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jagrosh.jmusicbot.commands.music;
+package com.jagrosh.jmusicbot.commands.dj;
 
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
-import com.jagrosh.jmusicbot.commands.MusicCommand;
+import com.jagrosh.jmusicbot.commands.Command;
 
 /**
  *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class SkiptoCmd extends MusicCommand 
+public class PauseCmd extends Command 
 {
-    public SkiptoCmd(Bot bot)
+    public PauseCmd(Bot bot)
     {
         super(bot);
-        this.name = "skipto";
-        this.help = "skips to the specified song";
-        this.arguments = "<position>";
+        this.name = "pause";
+        this.help = "pauses the current song";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.bePlaying = true;
     }
@@ -39,24 +38,13 @@ public class SkiptoCmd extends MusicCommand
     @Override
     public void doCommand(CommandEvent event) 
     {
-        int index = 0;
-        try
-        {
-            index = Integer.parseInt(event.getArgs());
-        }
-        catch(NumberFormatException e)
-        {
-            event.reply(event.getClient().getError()+" `"+event.getArgs()+"` is not a valid integer!");
-            return;
-        }
         AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
-        if(index<1 || index>handler.getQueue().size())
+        if(handler.getPlayer().isPaused())
         {
-            event.reply(event.getClient().getError()+" Position must be a valid integer between 1 and "+handler.getQueue().size()+"!");
+            event.replyWarning("The player is already paused! Use `"+event.getClient().getPrefix()+"play` to unpause!");
             return;
         }
-        handler.getQueue().skip(index-1);
-        event.reply(event.getClient().getSuccess()+" Skipped to **"+handler.getQueue().get(0).getTrack().getInfo().title+"**");
-        handler.getPlayer().stopTrack();
+        handler.getPlayer().setPaused(true);
+        event.replySuccess("Paused **"+handler.getPlayer().getPlayingTrack().getInfo().title+"**. Type `"+event.getClient().getPrefix()+"play` to unpause!");
     }
 }

@@ -20,7 +20,7 @@ import com.jagrosh.jdautilities.commons.utils.FinderUtil;
 import com.jagrosh.jdautilities.menu.OrderedMenu;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
-import com.jagrosh.jmusicbot.commands.MusicCommand;
+import com.jagrosh.jmusicbot.commands.BaseCommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Michaili K.
  */
-public class RemoveCmd extends MusicCommand
+public class RemoveCmd extends BaseCommand
 {
     public RemoveCmd(Bot bot)
     {

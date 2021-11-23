@@ -67,7 +67,7 @@ public class PlayCmd extends MusicCommand
             if(handler.getPlayer().getPlayingTrack()!=null && handler.getPlayer().isPaused())
             {
                 handler.getPlayer().setPaused(false);
-                event.replySuccess("Resumed **"+handler.getPlayer().getPlayingTrack().getInfo().title+"**.");
+                    event.replySuccess("Resumed **"+handler.getPlayer().getPlayingTrack().getInfo().title+"**.");
                 return;
             }
             StringBuilder builder = new StringBuilder(event.getClient().getWarning()+" Play Commands:\n");

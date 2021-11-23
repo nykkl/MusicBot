@@ -66,8 +66,13 @@ public class PlayCmd extends MusicCommand
             AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
             if(handler.getPlayer().getPlayingTrack()!=null && handler.getPlayer().isPaused())
             {
-                handler.getPlayer().setPaused(false);
-                event.replySuccess("Resumed **"+handler.getPlayer().getPlayingTrack().getInfo().title+"**.");
+                if(DJCommand.checkDJPermission(event))
+                {
+                    handler.getPlayer().setPaused(false);
+                    event.replySuccess("Resumed **"+handler.getPlayer().getPlayingTrack().getInfo().title+"**.");
+                }
+                else
+                    event.replyError("Only DJs can unpause the player!");
                 return;
             }
             StringBuilder builder = new StringBuilder(event.getClient().getWarning()+" Play Commands:\n");
