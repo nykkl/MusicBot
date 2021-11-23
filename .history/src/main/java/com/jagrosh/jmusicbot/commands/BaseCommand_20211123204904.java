@@ -18,9 +18,7 @@ package com.jagrosh.jmusicbot.commands;
 import com.jagrosh.jdautilities.command.Command;
 
 /**
- *
  * @author John Grosh (john.a.grosh@gmail.com)
  */
-public abstract class BaseCommand extends Command
-{
+public abstract class BaseCommand extends Command {
 }

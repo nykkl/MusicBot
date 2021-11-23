@@ -18,20 +18,13 @@ package com.jagrosh.jmusicbot.commands.music;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
-import com.jagrosh.jmusicbot.audio.QueuedTrack;
 import com.jagrosh.jmusicbot.commands.MusicCommand;
-import com.jagrosh.jmusicbot.settings.Settings;
-import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.User;
 
 /**
- *
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class ClearCmd extends MusicCommand 
-{
-    public ClearCmd(Bot bot)
-    {
+public class ClearCmd extends MusicCommand {
+    public ClearCmd(Bot bot) {
         super(bot);
         this.name = "clear";
         this.help = "clears the queue";
@@ -41,14 +34,13 @@ public class ClearCmd extends MusicCommand
     }
 
     @Override
-    public void doCommand(CommandEvent event) 
-    {
-        AudioHandler handler = (AudioHandler)event.getGuild().getAudioManager().getSendingHandler();
+    public void doCommand(CommandEvent event) {
+        AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         int count = handler.getQueue().removeAll(event.getAuthor().getIdLong());
-        if(count==0)
+        if (count == 0)
             event.replyWarning("You don't have any songs in the queue!");
         else
-            event.replySuccess("Successfully removed "+count+" entries.");
+            event.replySuccess("Successfully removed " + count + " entries.");
         return;
     }
 }

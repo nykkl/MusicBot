@@ -19,9 +19,7 @@ import com.jagrosh.jdautilities.command.Command;
 import net.dv8tion.jda.api.Permission;
 
 /**
- *
  * @author John Grosh (john.a.grosh@gmail.com)
  */
-public abstract class BaseCommand extends Command
-{
+public abstract class BaseCommand extends Command {
 }
