@@ -44,16 +44,31 @@ public class SettingsManager implements GuildSettingsManager {
                 if (!o.has("repeat_mode") && o.has("repeat") && o.getBoolean("repeat"))
                     o.put("repeat_mode", RepeatMode.ALL);
 
+                RepeatMode repeatMode = o.has("repeat_mode") ? null : RepeatMode.OFF;
+
+                if (repeatMode == null) {
+                    switch (o.getString("repeat_mode")) {
+                        case "ALL":
+                            repeatMode = RepeatMode.ALL;
+                            break;
+                        case "SINGLE":
+                            repeatMode = RepeatMode.SINGLE;
+                            break;
+                        default:
+                            repeatMode = RepeatMode.OFF;
+                            break;
+                    }
+                }
 
                 settings.put(Long.parseLong(id), new Settings(this,
                         o.has("text_channel_id") ? o.getString("text_channel_id") : null,
                         o.has("voice_channel_id") ? o.getString("voice_channel_id") : null,
-                        o.has("dj_role_id") ? o.getString("dj_role_id") : null,
                         o.has("volume") ? o.getInt("volume") : 100,
                         o.has("default_playlist") ? o.getString("default_playlist") : null,
-                        o.has("repeat_mode") ? o.getEnum(RepeatMode.class, "repeat_mode") : RepeatMode.OFF,
+                        repeatMode,
                         o.has("prefix") ? o.getString("prefix") : null,
-                        o.has("skip_ratio") ? o.getDouble("skip_ratio") : SKIP_RATIO));
+                        o.has("bass_boost") ? o.getInt("bass_boost") : 0)
+                );
             });
         } catch (IOException | JSONException e) {
             LoggerFactory.getLogger("Settings").warn("Failed to load server settings (this is normal if no settings have been set yet): " + e);
@@ -76,7 +91,7 @@ public class SettingsManager implements GuildSettingsManager {
     }
 
     private Settings createDefaultSettings() {
-        return new Settings(this, 0, 0, 0, 100, null, RepeatMode.OFF, null, SKIP_RATIO);
+        return new Settings(this, 0, 0, 0, null, RepeatMode.OFF, null, 0);
     }
 
     protected void writeSettings() {
@@ -88,8 +103,6 @@ public class SettingsManager implements GuildSettingsManager {
                 o.put("text_channel_id", Long.toString(s.textId));
             if (s.voiceId != 0)
                 o.put("voice_channel_id", Long.toString(s.voiceId));
-            if (s.roleId != 0)
-                o.put("dj_role_id", Long.toString(s.roleId));
             if (s.getVolume() != 100)
                 o.put("volume", s.getVolume());
             if (s.getDefaultPlaylist() != null)
@@ -98,8 +111,8 @@ public class SettingsManager implements GuildSettingsManager {
                 o.put("repeat_mode", s.getRepeatMode());
             if (s.getPrefix() != null)
                 o.put("prefix", s.getPrefix());
-            if (s.getSkipRatio() != SKIP_RATIO)
-                o.put("skip_ratio", s.getSkipRatio());
+            if (s.getBassBoost() != 0)
+                o.put("skip_ratio", s.getBassBoost());
             obj.put(Long.toString(key), o);
         });
         try {

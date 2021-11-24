@@ -34,11 +34,8 @@ public class BassBoostCmd extends AdminCommand {
     public void execute(CommandEvent event) {
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
 
-        if (handler == null) {
-            event.replyError("Unknown error!");
-            return;
-        } else if (event.getArgs().isEmpty()) {
-            event.replyError("Usage: bassboost <level>");
+        if (event.getArgs().isEmpty()) {
+            event.reply("Usage: bassboost <level>");
             return;
         }
 
