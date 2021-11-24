@@ -19,6 +19,9 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import com.jagrosh.jmusicbot.Bot;
 import com.jagrosh.jmusicbot.audio.AudioHandler;
 import com.jagrosh.jmusicbot.commands.AdminCommand;
+import com.jagrosh.jmusicbot.settings.Settings;
+import com.jagrosh.jmusicbot.utils.FormatUtil;
+import net.dv8tion.jda.api.entities.Emoji;
 
 /**
  * @author John Grosh <john.a.grosh@gmail.com>
@@ -33,21 +36,21 @@ public class BassBoostCmd extends AdminCommand {
     @Override
     public void execute(CommandEvent event) {
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
+        Settings settings = event.getClient().getSettingsFor(event.getGuild());
 
         if (event.getArgs().isEmpty()) {
-            event.reply("Usage: bassboost <level>");
+            event.reply(Emoji.fromMarkdown(":loud_sound:") + " Current volume is `" + settings.getBassBoost() + "`");
             return;
         }
 
         int boost = Integer.parseInt(event.getArgs());
 
         if (boost < 0 || boost > 100) {
-            event.reply(event.getClient().getError() + " Bass boost must be a valid integer between 1 and 100!");
+            event.reply(Emoji.fromMarkdown(":loud_sound:") + " Bass boost must be a valid integer between 1 and 100!");
             return;
         }
 
         // todo: eq preset filter factory
-        // todo: store bass boost settings in Settings class
         handler.setBandGains(
                 0.004f * boost,
                 0.005f * boost,
@@ -66,9 +69,9 @@ public class BassBoostCmd extends AdminCommand {
                 0.00f
         );
         if (boost == 0) {
-            event.replySuccess("Bass boost disabled!");
+            event.reply(Emoji.fromMarkdown(":speaker:") + "Bass boost disabled!");
         } else {
-            event.replySuccess("Successfully set bass boost to " + event.getArgs() + ".");
+            event.reply(Emoji.fromMarkdown(":loud_sound:") + "Successfully set bass boost to " + event.getArgs() + ".");
         }
     }
 }
