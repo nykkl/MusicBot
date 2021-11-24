@@ -39,14 +39,14 @@ public class BassBoostCmd extends AdminCommand {
         Settings settings = event.getClient().getSettingsFor(event.getGuild());
 
         if (event.getArgs().isEmpty()) {
-            event.reply(Emoji.fromMarkdown(":loud_sound:") + " Current volume is `" + settings.getBassBoost() + "`");
+            event.reply("\uD83D\uDD0A Current volume is `" + settings.getBassBoost() + "`"); // 🔊
             return;
         }
 
         int boost = Integer.parseInt(event.getArgs());
 
         if (boost < 0 || boost > 100) {
-            event.reply(Emoji.fromMarkdown(":loud_sound:") + " Bass boost must be a valid integer between 1 and 100!");
+            event.reply("\uD83D\uDD0A Bass boost must be a valid integer between 1 and 100!"); // 🔊
             return;
         }
 
@@ -69,9 +69,9 @@ public class BassBoostCmd extends AdminCommand {
                 0.00f
         );
         if (boost == 0) {
-            event.reply(Emoji.fromMarkdown(":speaker:") + "Bass boost disabled!");
+            event.reply("\uD83D\uDD08 Bass boost disabled!"); // 🔈
         } else {
-            event.reply(Emoji.fromMarkdown(":loud_sound:") + "Successfully set bass boost to " + event.getArgs() + ".");
+            event.reply("\uD83D\uDD0A Successfully set bass boost to " + event.getArgs() + "."); // 🔊
         }
     }
 }
