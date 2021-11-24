@@ -22,13 +22,13 @@ import com.jagrosh.jmusicbot.commands.OwnerCommand;
 /**
  * @author John Grosh <john.a.grosh@gmail.com>
  */
-public class ShutdownCmd extends OwnerCommand {
+public class UpdateCmd extends OwnerCommand {
     private final Bot bot;
 
-    public ShutdownCmd(Bot bot) {
+    public UpdateCmd(Bot bot) {
         this.bot = bot;
-        this.name = "shutdown";
-        this.help = "safely shuts down";
+        this.name = "update";
+        this.help = "safely updates the bot";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.guildOnly = false;
     }

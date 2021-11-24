@@ -129,7 +129,7 @@ public class JMusicBot {
                         new SetgameCmd(bot),
                         new SetnameCmd(bot),
                         new SetstatusCmd(bot),
-                        new ShutdownCmd(bot)
+                        new UpdateCmd(bot)
                 );
         boolean nogame = false;
         if (config.getStatus() != OnlineStatus.UNKNOWN)
